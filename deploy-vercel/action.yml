@@ -35,7 +35,7 @@ runs:
       uses: actions/github-script@v5
       env:
         PRODUCTION: ${{ inputs.is-production }}
-        SHA: ${{ github.event.pull_request.head.sha | github.sha }}
+        SHA: ${{ github.event.pull_request.head.sha || github.sha }}
       with:
         github-token: ${{ inputs.github-token }}
         script: |
