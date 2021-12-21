@@ -5,7 +5,8 @@ inputs:
   paths:
     description: "Path(s) to node modules you want to cache"
     required: true
-    default: "**/node_modules/"
+    default: |
+      **/node_modules/
 
 runs:
   using: "composite"
@@ -20,4 +21,4 @@ runs:
       uses: actions/cache@v2
       with:
         path: ${{ inputs.paths }}
-        key: node-modules-${{ runner.os }}-${{ steps.node-version.outputs.version }}-${{ hashFiles("**/yarn.lock") }}
+        key: node-modules-${{ runner.os }}-${{ steps.node-version.outputs.version }}-${{ hashFiles('**/yarn.lock') }}
