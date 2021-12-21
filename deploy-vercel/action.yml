@@ -41,7 +41,9 @@ runs:
           const { PRODUCTION } = process.env;
           const deployment = await github.rest.repos.createDeployment({
             ...context.repo,
-            ref: "${{ github.event.pull_request.head.sha }}",
+            ref: PRODUCTION 
+              ? "#{{ github.sha }} " 
+              : "${{ github.event.pull_request.head.sha }}",
             required_contexts: [],
             environment: PRODUCTION
               ? "Production"
