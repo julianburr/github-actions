@@ -33,14 +33,19 @@ runs:
     - name: Create github deployment
       id: deployment
       uses: actions/github-script@v5
+      env:
+        PRODUCTION: ${{ inputs.is-production }}
       with:
         github-token: ${{ inputs.github-token }}
         script: |
+          const { PRODUCTION } = process.env;
           const deployment = await github.rest.repos.createDeployment({
             ...context.repo,
             ref: "${{ github.event.pull_request.head.sha }}",
             required_contexts: [],
-            environment: "Preview"
+            environment: PRODUCTION
+              ? "Production"
+              : "Preview"
           });
           core.setOutput("id", deployment.data.id);
 
@@ -57,6 +62,7 @@ runs:
 
     - name: Add comment with deployment url
       uses: actions/github-script@v5
+      if: ${{ inputs.add-comment }}
       with:
         github-token: ${{ inputs.github-token }}
         script: |
@@ -79,15 +85,20 @@ runs:
     - name: On success
       if: success()
       uses: actions/github-script@v5
+      env:
+        PRODUCTION: ${{ inputs.is-production }}
       with:
         github-token: ${{ inputs.github-token }}
         script: |
+          const { PRODUCTION } = process.env;
           github.rest.repos.createDeploymentStatus({
             ...context.repo,
             deployment_id: '${{ steps.deployment.outputs.id }}',
             state: 'success',
             environment_url: "${{ steps.vercel.outputs.url }}",
-            description: `Preview deployed to ${{ steps.vercel.outputs.url }}`,
+            description: PRODUCTION
+              ? `Deployed to production URL`
+              : `Preview deployed to ${{ steps.vercel.outputs.url }}`,
           });
 
     - name: On error
