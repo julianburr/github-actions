@@ -45,6 +45,7 @@ runs:
           core.setOutput("id", deployment.data.id);
 
     - name: Deploy via vercel
+      shell: bash
       id: vercel
       run: |-
         mkdir .vercel
