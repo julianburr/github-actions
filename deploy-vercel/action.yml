@@ -63,25 +63,29 @@ runs:
 
     - name: Add comment with deployment url
       uses: actions/github-script@v5
-      if: ${{ inputs.add-comment }}
+      env:
+        ADD_COMMENT: ${{ inputs.add-comment }}
       with:
         github-token: ${{ inputs.github-token }}
         script: |
+          const { ADD_COMMENT } = process.env;
           const { issue: { number: issue_number }, repo: { owner, repo } } = context;
 
-          const comments = await github.rest.issues.listComments({issue_number, owner, repo});
-          const comment = comments.data.find(comment => comment.body.startsWith('<!-- automated PR comment -->'));
-          if (comment) {
-            github.rest.issues.deleteComment({issue_number, owner, repo, comment_id: comment.id});
-          }
+          if (issue_number && ADD_COMMENT) {
+            const comments = await github.rest.issues.listComments({issue_number, owner, repo});
+            const comment = comments.data.find(comment => comment.body.startsWith('<!-- automated PR comment -->'));
+            if (comment) {
+              github.rest.issues.deleteComment({issue_number, owner, repo, comment_id: comment.id});
+            }
 
-          const body = `<!-- automated PR comment -->\n\nPR has been deployed to: ${{ steps.vercel.outputs.url }}`
-          github.rest.issues.createComment({
-            issue_number,
-            owner,
-            repo,
-            body
-          });
+            const body = `<!-- automated PR comment -->\n\nPR has been deployed to: ${{ steps.vercel.outputs.url }}`
+            github.rest.issues.createComment({
+              issue_number,
+              owner,
+              repo,
+              body
+            });
+          }
 
     - name: On success
       if: success()
