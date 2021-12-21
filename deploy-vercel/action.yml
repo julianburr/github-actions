@@ -35,15 +35,14 @@ runs:
       uses: actions/github-script@v5
       env:
         PRODUCTION: ${{ inputs.is-production }}
+        SHA: ${{ github.event.pull_request.head.sha | github.sha }}
       with:
         github-token: ${{ inputs.github-token }}
         script: |
-          const { PRODUCTION } = process.env;
+          const { PRODUCTION, SHA } = process.env;
           const deployment = await github.rest.repos.createDeployment({
             ...context.repo,
-            ref: PRODUCTION 
-              ? "#{{ github.sha }} " 
-              : "${{ github.event.pull_request.head.sha }}",
+            ref: SHA,
             required_contexts: [],
             environment: PRODUCTION
               ? "Production"
