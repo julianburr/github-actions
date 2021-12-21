@@ -58,7 +58,13 @@ runs:
         echo '{ "projectId": "${{ inputs.vercel-project-id }}", "orgId": "${{ inputs.vercel-org-id}}" }' \
           > .vercel/project.json
 
-        vercel --token=${{ inputs.vercel-token }} > url.txt
+        if ${{ inputs.is-production }}
+        then
+          vercel --token=${{ inputs.vercel-token }} --prod > url.txt
+        else
+          vercel --token=${{ inputs.vercel-token }} > url.txt
+        fi
+
         echo "::set-output name=url::$(cat url.txt)"
 
     - name: Add comment with deployment url
