@@ -1,0 +1,27 @@
+name: Cache node modules
+description: This action caches node modules to speed up yarn installs in workflows
+
+inputs:
+  path:
+    description: "Path to node modules you want to cache"
+    required: true
+    default: "**/node_modules/"
+  yarn-lock-hash:
+    description: "Vercel Organisation ID"
+    required: true
+    default: hashFiles("**/yarn.lock")
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get Node version
+      shell: bash
+      id: node-version
+      run: |-
+        echo "::set-output name=version::$(node -v)"
+
+    - name: Use node modules from cache if available
+      uses: actions/cache@v2
+      with:
+        path: ${{ inputs.path }}
+        key: node-modules-${{ runner.os }}-${{ steps.node-version.outputs.version }}-${{ inputs.yarn-lock-hash }}
