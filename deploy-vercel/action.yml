@@ -44,7 +44,7 @@ runs:
             ...context.repo,
             ref: SHA,
             required_contexts: [],
-            environment: PRODUCTION
+            environment: PRODUCTION && PRODUCTION !== "false"
               ? "Production"
               : "Preview"
           });
@@ -107,7 +107,7 @@ runs:
             deployment_id: '${{ steps.deployment.outputs.id }}',
             state: 'success',
             environment_url: "${{ steps.vercel.outputs.url }}",
-            description: PRODUCTION
+            description: PRODUCTION && PRODUCTION !== "false"
               ? `Deployed to production URL`
               : `Preview deployed to ${{ steps.vercel.outputs.url }}`,
           });
