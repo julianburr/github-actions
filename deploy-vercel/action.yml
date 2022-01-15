@@ -20,6 +20,9 @@ inputs:
   add-comment:
     description: "For PRs, the action can optionally add a comment on the PR with a link to the deployed URL"
     default: false
+  working-directory:
+    description: "Root directory that should be deployed"
+    default: "./"
 
 outputs:
   deploy-id:
@@ -53,6 +56,7 @@ runs:
     - name: Deploy via vercel
       shell: bash
       id: vercel
+      working-directory: ${{ inputs.working-directory }}
       run: |-
         mkdir .vercel
         echo '{ "projectId": "${{ inputs.vercel-project-id }}", "orgId": "${{ inputs.vercel-org-id}}" }' \
