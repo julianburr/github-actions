@@ -1,0 +1,23 @@
+name: Write .env file into specified location
+description: This action takes a string input and creates a .env file from it
+
+inputs:
+  env:
+    description: Content of the .env file
+    required: true
+  directory:
+    description: Folder path where the .env file should be created
+    required: false
+    default: '.'
+  file-name:
+    description: File name that should be used
+    required: false
+    default: .env
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Trim input and write to file
+      shell: bash
+      run: echo "${{ inputs.env }}" | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//' > ${{ inputs.file-name }}
+      working-directory: ${{ inputs.directory }}

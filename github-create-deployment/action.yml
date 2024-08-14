@@ -1,0 +1,37 @@
+name: Github - Create deployment
+description: This action creates a Github deployment
+
+inputs:
+  environment:
+    description: 'Environment to create a Github deployment'
+    required: true
+  github-token:
+    description: 'Github token'
+    required: true
+
+outputs:
+  id:
+    description: 'Github deployment ID'
+    value: ${{ steps.github-deployment.outputs.id }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Create github deployment
+      id: github-deployment
+      uses: actions/github-script@v6
+      env:
+        SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        ENVIRONMENT: ${{ inputs.environment }}
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const { SHA, ENVIRONMENT } = process.env;
+          const deployment = await github.rest.repos.createDeployment({
+            ...context.repo,
+            ref: SHA,
+            required_contexts: [],
+            auto_merge: false,
+            environment: ENVIRONMENT
+          });
+          core.setOutput("id", deployment.data.id);

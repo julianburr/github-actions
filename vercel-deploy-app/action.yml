@@ -1,0 +1,86 @@
+name: Vercel - Deploy app
+description: This action helps deploying a project using Vercel
+
+inputs:
+  vercel-project-id:
+    description: 'Vercel project ID'
+    required: true
+  vercel-project-name:
+    description: 'Vercel project name'
+    required: true
+  vercel-org-id:
+    description: 'Vercel organisation ID'
+    required: true
+  vercel-token:
+    description: 'Vercel token'
+    required: true
+  is-production:
+    description: 'Boolean whether or not this is a production deployment'
+    required: false
+  alias:
+    description: 'URL alias for the deployment'
+    required: false
+
+outputs:
+  url:
+    description: Deployment url
+    value: ${{ steps.alias.outputs.url || steps.vercel.outputs.url }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Create project file
+      shell: bash
+      run: |-
+        mkdir .vercel || true
+        rm -f .vercel/project.json
+        echo '{ "projectId": "${{ inputs.vercel-project-id }}", "orgId": "${{ inputs.vercel-org-id}}" }' \
+          > .vercel/project.json
+
+    - name: Deploy via vercel
+      shell: bash
+      id: vercel
+      run: |-
+        deploy() {
+          if ${{ inputs.is-production || 'false' }}
+          then
+            vercel --token=${{ inputs.vercel-token }} --scope ${{ inputs.vercel-org-id }} --archive=tgz --prod > url.txt
+          else
+            vercel --token=${{ inputs.vercel-token }} --scope ${{ inputs.vercel-org-id }} --archive=tgz > url.txt
+          fi
+        }
+
+        # HACK: Retry 3 times because vercel is pretty flaky atm
+        # https://github.com/orgs/community/discussions/27121
+        for i in {1..3}
+        do
+          if ! [ -s url.txt ]
+          then
+            deploy || true
+            # Vercel also always returns the deployment URL, even if the deployment fails
+            # So we check manually after the deployment if the URL actually exists
+            URL=$(cat url.txt)
+            echo $URL
+            if ! curl --head --silent --fail $URL
+            then
+              echo "URL does not exist"
+              rm url.txt
+            fi
+          fi
+        done
+
+        # Fail if url is still not set
+        if ! [ -s url.txt ]
+        then
+          exit 1
+        fi
+
+        echo "url=$(cat url.txt)" >> $GITHUB_OUTPUT
+
+    - name: Create alias
+      shell: bash
+      if: ${{ inputs.alias }}
+      id: alias
+      run: |-
+        vercel --token=${{ inputs.vercel-token }} alias set ${{ steps.vercel.outputs.url }} ${{ inputs.alias }} --scope ${{ inputs.vercel-org-id }}
+        echo "url=https://${{ inputs.alias }}" >> $GITHUB_OUTPUT

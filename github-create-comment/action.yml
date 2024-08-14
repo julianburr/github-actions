@@ -1,0 +1,20 @@
+name: Github - Create PR comment
+description: Creates a comment on the current PR, only supported in `pull_request` workflows
+
+inputs:
+  github-token:
+    description: Github token
+    required: true
+  pr-number:
+    description: PR number that the comment should appear on
+    required: true
+  content:
+    description: Comment content
+    required: true
+  id:
+    description: Comment identifier, existing comments with the same identifier will be deleted
+    required: false
+
+runs:
+  using: node16
+  main: action.js

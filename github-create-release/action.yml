@@ -1,0 +1,21 @@
+name: Github - Create release
+description: This action creates a Github release entry
+
+inputs:
+  github-token:
+    description: Github token
+    required: true
+  release:
+    description: Release name
+    required: true
+  text:
+    description: Release body
+    required: true
+
+outputs:
+  id:
+    description: 'ID of the created release'
+
+runs:
+  using: 'node16'
+  main: 'action.js'
