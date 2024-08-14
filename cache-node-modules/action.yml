@@ -15,10 +15,13 @@ runs:
       shell: bash
       id: node-version
       run: |-
-        echo "::set-output name=version::$(node -v)"
+        echo "version=$(node -v)" >> $GITHUB_OUTPUT
 
-    - name: Use node modules from cache if available
-      uses: actions/cache@v2
+    - name: Cache node_modules
+      uses: actions/cache@v3
+      id: yarn-cache
       with:
         path: ${{ inputs.paths }}
-        key: node-modules-${{ runner.os }}-${{ steps.node-version.outputs.version }}-${{ hashFiles('**/yarn.lock') }}
+        key: node-modules-v1-${{ runner.os }}-${{ steps.node-version.outputs.version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
