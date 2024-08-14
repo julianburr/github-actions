@@ -5,10 +5,6 @@ Personal collection of github actions to use across projects. The idea is to hav
 ## How to use actions from this repo
 
 ```yml
-##
-# Example usage of actions from this repo
-##
-
 # Check out the actions repo
 # To lock down to specific version, you can define a specific commit sha as `ref` here
 - name: Checkout shared actions repo
