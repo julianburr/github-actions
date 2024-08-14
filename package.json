@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "This repo contains a collection of reusable Github Actions.",
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky",
     "format": "prettier --write **/*.{md,json,yml}",
     "lint": "eslint . --quiet",
     "lint:staged": "lint-staged",
@@ -19,7 +19,7 @@
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-unused-imports": "^2.0.0",
     "husky": "^9.1.4",
     "lint-staged": "^15.2.9",

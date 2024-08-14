@@ -1,0 +1,25 @@
+name: Vercel - Teardown orphaned deployments
+description: This action helps cleaning up unused Vercel deployments
+
+inputs:
+  vercel-org-id:
+    description: Vercel organisation ID
+    required: true
+  vercel-token:
+    description: 'Vercel token'
+    required: true
+  vercel-project-names:
+    description: 'Vercel project names, comma separated'
+    required: true
+  vercel-aliases:
+    description: 'PR alias names, comma separated'
+    required: false
+    default: ''
+
+  github-token:
+    description: 'Github token'
+    required: true
+
+runs:
+  using: 'node16'
+  main: 'action.js'
