@@ -2,8 +2,8 @@ const { setOutput, getInput } = require('@actions/core');
 const { context, getOctokit } = require('@actions/github');
 
 const githubToken = getInput('github-token');
-const name = getInput('release');
-const text = getInput('text');
+const name = getInput('name');
+const body = getInput('body');
 
 const github = getOctokit(githubToken);
 
@@ -12,7 +12,7 @@ async function main() {
     ...context.repo,
     name: `Release ${name}`,
     tag_name: `release-${name}`,
-    body: text
+    body
   });
 
   console.log({ release });
