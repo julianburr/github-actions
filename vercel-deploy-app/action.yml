@@ -83,5 +83,5 @@ runs:
       if: ${{ inputs.alias }}
       id: alias
       run: |-
-        vercel --token=${{ inputs.vercel-token }} alias set ${{ steps.vercel.outputs.url }} ${{ inputs.alias }} --scope ${{ inputs.vercel-org-id }}
+        vercel --token=${{ inputs.vercel-token }} alias set ${{ steps.vercel.outputs.url }} ${{ inputs.alias }} --scope ${{ inputs.scope }}
         echo "url=https://${{ inputs.alias }}" >> $GITHUB_OUTPUT
