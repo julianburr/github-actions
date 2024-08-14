@@ -1,6 +1,8 @@
 # github-actions
 
-Personal collection of github actions to use across projects.
+Personal collection of github actions to use across projects. The idea is to have a single repo for all common actions, rather than having to have individual repos for each of them.
+
+## How to use actions from this repo
 
 ```yml
 ##
