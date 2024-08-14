@@ -25,7 +25,7 @@ Personal collection of github actions to use across projects. The idea is to hav
 
 # Simply use any of the actions from the checked out repo
 - name: Deploy app to vercel
-  uses: ./.github/shared/src/vercel-deploy-app
+  uses: ./.github/shared/vercel-deploy-app
   with:
     vercel-token: ${{ inputs.vercel-token }}
     vercel-org-id: ${{ inputs.vercel-org-id }}
