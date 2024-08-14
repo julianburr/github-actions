@@ -3,13 +3,13 @@ description: This action caches node modules to speed up yarn installs in workfl
 
 inputs:
   paths:
-    description: "Path(s) to node modules you want to cache"
+    description: 'Path(s) to node modules you want to cache'
     required: true
     default: |
       **/node_modules/
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Get Node version
       shell: bash

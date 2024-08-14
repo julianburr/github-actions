@@ -1,0 +1,30 @@
+{
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "plugins": ["import", "unused-imports"],
+  "rules": {
+    "max-lines": "error",
+
+    "import/exports-last": "error",
+    "import/group-exports": "error",
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", "object", "type"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc"
+        }
+      }
+    ],
+
+    "unused-imports/no-unused-imports": "error"
+  },
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "env": {
+    "node": true,
+    "es6": true
+  }
+}
