@@ -3,22 +3,23 @@ description: This action helps deploying a project using Vercel
 
 inputs:
   vercel-project-id:
-    description: 'Vercel project ID'
-    required: true
-  vercel-project-name:
-    description: 'Vercel project name'
+    description: Vercel project ID
     required: true
   vercel-org-id:
-    description: 'Vercel organisation ID'
+    description: Vercel organisation ID
     required: true
   vercel-token:
-    description: 'Vercel token'
+    description: Vercel token
     required: true
-  is-production:
-    description: 'Boolean whether or not this is a production deployment'
+  vercel-scope:
+    description: Vercel scope
     required: false
+  is-production:
+    description: Boolean whether or not this is a production deployment
+    required: false
+    default: 'false'
   alias:
-    description: 'URL alias for the deployment'
+    description: URL alias for the deployment
     required: false
 
 outputs:
@@ -44,9 +45,9 @@ runs:
         deploy() {
           if ${{ inputs.is-production || 'false' }}
           then
-            vercel --token=${{ inputs.vercel-token }} --scope ${{ inputs.vercel-org-id }} --archive=tgz --prod > url.txt
+            vercel --token=${{ inputs.vercel-token }} --archive=tgz --scope=${{ inputs.scope }} --prod > url.txt
           else
-            vercel --token=${{ inputs.vercel-token }} --scope ${{ inputs.vercel-org-id }} --archive=tgz > url.txt
+            vercel --token=${{ inputs.vercel-token }} --archive=tgz --scope=${{ inputs.scope }} > url.txt
           fi
         }
 
