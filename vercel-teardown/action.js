@@ -67,7 +67,7 @@ async function main() {
     number: parseInt(url.match(aliasNumberRegex)[1])
   });
 
-  const aliasesOutput = await getVercelOutput(`vercel`, [
+  const aliasesOutput = await getVercelOutput(`npx vercel`, [
     `--token=${vercelToken}`,
     `--scope=${vercelOrgId}`,
     `alias`,
@@ -85,7 +85,7 @@ async function main() {
       `--next=${nextCommand[3]}`
     ];
     console.log({ nextArgs });
-    const nextAliasesOutput = await getVercelOutput(`vercel`, nextArgs);
+    const nextAliasesOutput = await getVercelOutput(`npx vercel`, nextArgs);
     console.log({ nextAliasesOutput });
     const nextMatches = nextAliasesOutput.match(aliasUrlRegex);
     console.log({ nextMatches });
@@ -101,7 +101,7 @@ async function main() {
     if (!activePrNumbers.includes(alias.number)) {
       try {
         execSync(
-          `vercel --token=${vercelToken} alias rm ${alias.url} --yes --scope ${vercelOrgId}`
+          `npx vercel --token=${vercelToken} alias rm ${alias.url} --yes --scope ${vercelOrgId}`
         );
         console.log(`Removed alias ${alias.url}`);
       } catch (e) {
@@ -115,7 +115,7 @@ async function main() {
   projects.forEach((projectName) => {
     try {
       execSync(
-        `vercel --token=${vercelToken} rm ${projectName.trim()} --safe --yes --scope ${vercelOrgId}`
+        `npx vercel --token=${vercelToken} rm ${projectName.trim()} --safe --yes --scope ${vercelOrgId}`
       ).toString();
       console.log(`Removed orphaned deployments for ${projectName.trim()}`);
     } catch (e) {
