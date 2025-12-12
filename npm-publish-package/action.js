@@ -53,37 +53,32 @@ async function getPackageDetails() {
 async function main() {
   const packageDetails = await getPackageDetails();
 
-  for (const name in packageDetails) {
-    // Get publish config from package json
-    const package = packageDetails[name];
+  // Get tag from version, if version starts with `0.0.0-*` use whatever is in that version as the tag,
+  // e.g. `0.0.0-experimental-[hash]` will result in the tag `experimental`
+  const version = packageDetails.packageJson.version;
+  const isRC = packageDetails.packageJson.version.startsWith('0.0.0-');
+  const isNewVersion = canPublish(
+    packageDetails.packageJson.version,
+    packageDetails.distTags?.[tag]
+  );
 
-    // Get tag from version, if version starts with `0.0.0-*` use whatever is in that version as the tag,
-    // e.g. `0.0.0-experimental-[hash]` will result in the tag `experimental`
-    const version = package.packageJson.version;
-    const isRC = package.packageJson.version.startsWith('0.0.0-');
-    const isNewVersion = canPublish(
-      package.packageJson.version,
-      package.distTags?.[tag]
+  const tag = isRC ? version.match(/^0\.0\.0-([^\.-]+)/)[1] : 'latest';
+
+  if (!isRC && !isNewVersion) {
+    console.info(
+      `Ignoring package ${name}\n\tCurrent version: ${package.packageJson.version}\n\tComparison version: ${package.distTags?.[tag]}`
     );
+    return;
+  }
 
-    const tag = isRC ? version.match(/^0\.0\.0-([^\.-]+)/)[1] : 'latest';
-
-    if (!isRC && !isNewVersion) {
-      console.info(
-        `Ignoring package ${name}\n\tCurrent version: ${package.packageJson.version}\n\tComparison version: ${package.distTags?.[tag]}`
-      );
-      return;
-    }
-
-    // Otherwise attempt release
-    console.log(`Publishing ${name} with tag '${tag} and access '${access}'`);
-    try {
-      cp.execSync(
-        `cd ${package.path} && npm publish --tag ${tag} --access ${access}`
-      );
-    } catch {
-      console.error(`Publishing failed for ${name}`);
-    }
+  // Otherwise attempt release
+  console.log(`Publishing ${name} with tag '${tag} and access '${access}'`);
+  try {
+    cp.execSync(
+      `cd ${package.path} && npm publish --tag ${tag} --access ${access}`
+    );
+  } catch {
+    console.error(`Publishing failed for ${name}`);
   }
 }
 
