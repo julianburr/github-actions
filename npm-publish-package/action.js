@@ -23,11 +23,7 @@ async function getPackageDetails() {
 
   try {
     console.log(`Retrieving package details for registry for ${packageName}`);
-    const res = await got(`https://registry.npmjs.org/${packageName}`, {
-      headers: {
-        Authorization: `Bearer ${npmToken}`
-      }
-    }).json();
+    const res = await got(`https://registry.npmjs.org/${packageName}`).json();
 
     return {
       path: packagePath,
