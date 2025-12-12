@@ -56,13 +56,11 @@ async function main() {
   // Get tag from version, if version starts with `0.0.0-*` use whatever is in that version as the tag,
   // e.g. `0.0.0-experimental-[hash]` will result in the tag `experimental`
   const version = packageDetails.packageJson.version;
+  const name = packageDetails.packageJson.name;
   const isRC = packageDetails.packageJson.version.startsWith('0.0.0-');
 
   const tag = isRC ? version.match(/^0\.0\.0-([^\.-]+)/)[1] : 'latest';
-  const isNewVersion = canPublish(
-    packageDetails.packageJson.version,
-    packageDetails.distTags?.[tag]
-  );
+  const isNewVersion = canPublish(version, packageDetails.distTags?.[tag]);
 
   if (!isRC && !isNewVersion) {
     console.info(
