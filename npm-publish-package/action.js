@@ -78,7 +78,7 @@ async function main() {
       `cd ${packageDetails.path} && npm publish --tag=${tag} --access=${access}`
     );
   } catch (e) {
-    console.error(`Publishing failed for ${name}: ${e.message}\n\n${e.stack}`);
+    console.error(`Publishing failed for ${name}: ${e.message}\n${e.stack}`);
     throw e;
   }
 }
