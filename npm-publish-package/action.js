@@ -77,8 +77,8 @@ async function main() {
     cp.execSync(
       `cd ${package.path} && npm publish --tag=${tag} --access=${access}`
     );
-  } catch {
-    console.error(`Publishing failed for ${name}`);
+  } catch (e) {
+    console.error(`Publishing failed for ${name}: ${e.message}`);
   }
 }
 
