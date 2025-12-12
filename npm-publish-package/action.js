@@ -65,8 +65,8 @@ async function main() {
   if (!isRC && !isNewVersion) {
     console.info(
       `Ignoring package ${name}\n\tTag: ${tag}\n` +
-        `\tCurrent version: ${package.packageJson.version}\n` +
-        `\tComparison version: ${package.distTags?.[tag]}`
+        `\tCurrent version: ${packageDetails.packageJson.version}\n` +
+        `\tComparison version: ${packageDetails.distTags?.[tag]}`
     );
     return;
   }
@@ -75,10 +75,11 @@ async function main() {
   console.log(`Publishing ${name} with tag '${tag} and access '${access}'`);
   try {
     cp.execSync(
-      `cd ${package.path} && npm publish --tag=${tag} --access=${access}`
+      `cd ${packageDetails.path} && npm publish --tag=${tag} --access=${access}`
     );
   } catch (e) {
-    console.error(`Publishing failed for ${name}: ${e.message}`);
+    console.error(`Publishing failed for ${name}: ${e.message}\n\n${e.stack}`);
+    throw e;
   }
 }
 
