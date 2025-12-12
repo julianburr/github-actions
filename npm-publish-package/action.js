@@ -75,7 +75,7 @@ async function main() {
   console.log(`Publishing ${name} with tag '${tag} and access '${access}'`);
   try {
     cp.execSync(
-      `cd ${package.path} && npm publish --tag ${tag} --access ${access}`
+      `cd ${package.path} && npm publish --tag=${tag} --access=${access}`
     );
   } catch {
     console.error(`Publishing failed for ${name}`);
