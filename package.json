@@ -14,15 +14,19 @@
     "**/*.{md,json,yml}": "prettier --write"
   },
   "dependencies": {
-    "@actions/core": "^1.10.0",
-    "@actions/github": "^5.1.1",
-    "eslint": "^8.34.0",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-unused-imports": "^2.0.0",
-    "husky": "^9.1.4",
-    "lint-staged": "^15.2.9",
-    "prettier": "^3.3.3"
+    "@actions/core": "^2.0.1",
+    "@actions/github": "^6.0.1",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-unused-imports": "^4.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "got": "^14.6.5",
+    "semver": "^7.7.3",
+    "prettier": "^3.7.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.49.0"
   }
 }

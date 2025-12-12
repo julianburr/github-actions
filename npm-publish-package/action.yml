@@ -1,0 +1,17 @@
+name: Publish packages
+description: This action publishes packages to the latest tag on NPM
+
+inputs:
+  package-path:
+    description: Path to package within the repo, defaults to root directory
+    default: '.'
+  access:
+    description: NPM access level, defaults to 'public'
+    default: 'public'
+  npm-token:
+    description: NPM token with publish permissions
+    required: true
+
+runs:
+  using: 'node24'
+  main: 'action.js'

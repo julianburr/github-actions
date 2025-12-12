@@ -17,5 +17,5 @@ outputs:
     description: 'ID of the created release'
 
 runs:
-  using: 'node16'
+  using: 'node24'
   main: 'action.js'
