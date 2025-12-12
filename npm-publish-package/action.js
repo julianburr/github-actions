@@ -55,7 +55,7 @@ async function getPackageDetails() {
 }
 
 async function main() {
-  const packageDetails = await getPackageDetails({ globPaths, npmToken });
+  const packageDetails = await getPackageDetails();
 
   for (const name in packageDetails) {
     // Get publish config from package json
