@@ -7,7 +7,6 @@ const semver = require('semver');
 
 const packagePath = getInput('package-path');
 const access = getInput('access');
-const npmToken = getInput('npm-token');
 
 function canPublish(version, publishedVersion) {
   // No published version means the package hasn't been published yet
