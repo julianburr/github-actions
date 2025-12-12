@@ -57,16 +57,18 @@ async function main() {
   // e.g. `0.0.0-experimental-[hash]` will result in the tag `experimental`
   const version = packageDetails.packageJson.version;
   const isRC = packageDetails.packageJson.version.startsWith('0.0.0-');
+
+  const tag = isRC ? version.match(/^0\.0\.0-([^\.-]+)/)[1] : 'latest';
   const isNewVersion = canPublish(
     packageDetails.packageJson.version,
     packageDetails.distTags?.[tag]
   );
 
-  const tag = isRC ? version.match(/^0\.0\.0-([^\.-]+)/)[1] : 'latest';
-
   if (!isRC && !isNewVersion) {
     console.info(
-      `Ignoring package ${name}\n\tCurrent version: ${package.packageJson.version}\n\tComparison version: ${package.distTags?.[tag]}`
+      `Ignoring package ${name}\n\tTag: ${tag}\n` +
+        `\tCurrent version: ${package.packageJson.version}\n` +
+        `\tComparison version: ${package.distTags?.[tag]}`
     );
     return;
   }
