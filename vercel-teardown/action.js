@@ -67,17 +67,19 @@ async function main() {
     number: parseInt(url.match(aliasNumberRegex)[1])
   });
 
-  const aliasesOutput = await getVercelOutput(`npx vercel`, [
-    `--token=${vercelToken}`,
-    `--scope=${vercelOrgId}`,
+  const aliasesOutput = await getVercelOutput(`npx`, [
+    'vercel',
     `alias`,
-    `ls`
+    `ls`,
+    `--token=${vercelToken}`,
+    `--scope=${vercelOrgId}`
   ]);
 
   let aliases = aliasesOutput.match(aliasUrlRegex)?.map?.(mapAliasUrls) || [];
   let nextCommand = aliasesOutput.match(nextPageRegex);
   while (nextCommand && nextCommand[0]) {
     const nextArgs = [
+      'vercel',
       `alias`,
       `ls`,
       `--token=${nextCommand[1]}`,
@@ -85,7 +87,7 @@ async function main() {
       `--next=${nextCommand[3]}`
     ];
     console.log({ nextArgs });
-    const nextAliasesOutput = await getVercelOutput(`npx vercel`, nextArgs);
+    const nextAliasesOutput = await getVercelOutput(`npx`, nextArgs);
     console.log({ nextAliasesOutput });
     const nextMatches = nextAliasesOutput.match(aliasUrlRegex);
     console.log({ nextMatches });
