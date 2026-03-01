@@ -16,7 +16,7 @@ const github = getOctokit(githubToken);
 function getVercelOutput(command, args) {
   return new Promise((resolve, reject) => {
     let output = '';
-    const child = spawn(command, args);
+    const child = spawn(command, args, { shell: true });
     child.stdout.on('data', (data) => {
       output += data.toString();
     });
